@@ -7,13 +7,15 @@ const shared = {
   id: 'rooftop-apartment',
   coverImage,
   theme: { outer: '#111112', surface: '#171718', paper: '#e5ddcf', ink: '#2b2925', muted: '#817b72', accent: '#63826b', danger: '#a85f4d', gold: '#d4a860', material: 'apartment' as const },
+  itemImageDirection: 'intimate editorial domestic still life, lived-in rooftop apartment, warm brick, plant green and faded cream, soft window light, tactile everyday realism',
   audioTheme: {
-    material: 'apartment' as const,
-    bpm: 62,
-    rootHz: 130.81,
-    scale: [0, 2, 4, 7, 9],
+    material: 'apartment' as const, bpm: 62, rootHz: 130.81, scale: [0, 2, 4, 7, 9],
     levels: { music: .11, ambient: .075, sfx: .16, master: .22 },
-    tension: [{ statId: 'rent', direction: 'high' as const, weight: .4 }, { statId: 'order', direction: 'low' as const, weight: .3 }, { statId: 'reputation', direction: 'low' as const, weight: .3 }],
+    tension: [
+      { statId: 'rent', direction: 'high' as const, weight: .4 },
+      { statId: 'order', direction: 'low' as const, weight: .3 },
+      { statId: 'reputation', direction: 'low' as const, weight: .3 },
+    ],
   },
 }
 
@@ -37,12 +39,19 @@ export const rooftopApartment: StoryCartridge = {
     choices: [{ id: 'listen', label: '先听每个人说自己知道的情况' }, { id: 'records', label: '检查公共账本和维修记录' }, { id: 'landlord', label: '立刻给房东打电话' }],
   },
   characters: [
-    { id: 'jo', name: '乔', role: '临时摄影师', vitality: 7, stress: 6, skills: [{ id: 'listen', label: '倾听', value: 2 }, { id: 'hide', label: '掩饰', value: 4 }] },
-    { id: 'lin', name: '林澄', role: '夜班护士', vitality: 6, stress: 7, skills: [{ id: 'coordinate', label: '协调', value: 4 }, { id: 'act', label: '行动力', value: 3 }] },
-    { id: 'mo', name: '莫河', role: '研究生', vitality: 8, stress: 4, skills: [{ id: 'listen', label: '倾听', value: 4 }, { id: 'coordinate', label: '协调', value: 2 }] },
+    { id: 'jo', name: '乔', role: '临时摄影师', vitality: 7, stress: 6, detail: '擅长注意别人忽略的画面，却常把不想面对的事实留在相机里。', lore: '他用屋顶储物间抵掉一部分房租，也因此最害怕房东收回公共空间。', skills: [{ id: 'listen', label: '倾听', value: 2 }, { id: 'hide', label: '掩饰', value: 4 }] },
+    { id: 'lin', name: '林澄', role: '夜班护士', vitality: 6, stress: 7, detail: '行动果断，习惯在混乱中分配任务和确认时间线。', lore: '她是公寓里唯一与房东签过完整书面合同的人，大家常让她代表交涉。', skills: [{ id: 'coordinate', label: '协调', value: 4 }, { id: 'act', label: '行动力', value: 3 }] },
+    { id: 'mo', name: '莫河', role: '研究生', vitality: 8, stress: 4, detail: '耐心整理账目和争执，常能记住一句话在几个月前的原意。', lore: '公共账本最初就是他用废论文装订的，里面混着维修、借款和住户之间的承诺。', skills: [{ id: 'listen', label: '倾听', value: 4 }, { id: 'coordinate', label: '协调', value: 2 }] },
   ],
-  initialMap: [{ id: 'kitchen', label: '公共厨房', current: true }, { id: 'roof', label: '屋顶', connectedTo: '公共厨房' }, { id: 'street', label: '街区', connectedTo: '屋顶' }],
-  initialInventory: [{ id: 'ledger', label: '公共账本', count: 1 }, { id: 'keys', label: '备用钥匙', count: 2 }],
+  initialMap: [
+    { id: 'kitchen', label: '公共厨房', current: true, detail: '四只不配套的杯子、老冰箱和一张总是被账单占据的餐桌。', lore: '这间厨房不是租约里的公共区域，是历任住户一点点争取来的。', facts: ['补缴单压在盐罐下面', '今晚所有住户都在场'] },
+    { id: 'roof', label: '屋顶', connectedTo: '公共厨房', detail: '花盆、晾衣线和一根反复漏水的旧管道挤在半开放平台上。', lore: '住户自己修出的屋顶花园让这里成为家，也成了房东追加费用的理由。', facts: ['水表上周三已经倒转', '乔拍到过漏水照片'] },
+    { id: 'street', label: '街区', connectedTo: '屋顶', detail: '楼下是熟悉住户多过正式店名的老街区。', lore: '邻里声誉决定谁会替公寓作证，也决定纠纷时谁愿意装作没看见。', facts: ['邻居能看到屋顶改造', '房东不住在本街区'] },
+  ],
+  initialInventory: [
+    { id: 'ledger', label: '公共账本', count: 1, detail: '用废论文和棉线装订的厚账本，夹着票据、便签和维修编号。', effect: '可核对共同支出、借款和维修时间；缺页或未签名记录只能作为线索，不能单独证明责任。', lore: '它把一群临时住户慢慢变成共同生活的人，许多承诺只在这里有唯一记录。', metrics: [{ label: '记录跨度', value: '2 年 4 个月' }, { label: '缺页', value: '1 页' }], imagePrompt: 'single handmade communal apartment ledger bound from recycled paper with cotton thread, receipts and blank sticky notes, no readable text, warm window light, object only, square' },
+    { id: 'keys', label: '备用钥匙', count: 2, detail: '两把颜色不同的旧黄铜钥匙，挂着没有文字的塑料牌。', effect: '分别打开屋顶门和地下水表间；借出后若未归还，公共空间安全会下降。', lore: '住户搬走时通常会交回钥匙，但这两把的原持有人都没有留下新地址。', metrics: [{ label: '屋顶门', value: '1 把' }, { label: '水表间', value: '1 把' }], imagePrompt: 'two mismatched old brass apartment keys on faded plastic tags without writing, intimate domestic still life, warm brick and plant green, object only, square' },
+  ],
   demoTurns: [
     { match: ['听', '账本', '维修'], content: `你把补缴单放到桌子中央，让每个人按时间说清楚自己见过什么。
 [林澄] [main] [思考]: "上周三凌晨，水表已经在倒转。那时屋顶还没动工。"
@@ -82,12 +91,19 @@ export const rooftopApartmentEn: StoryCartridge = {
     choices: [{ id: 'listen', label: 'Hear what each resident knows first' }, { id: 'records', label: 'Check the shared ledger and repair records' }, { id: 'landlord', label: 'Call the landlord immediately' }],
   },
   characters: [
-    { id: 'jo', name: 'Jo', role: 'Freelance photographer', vitality: 7, stress: 6, skills: [{ id: 'listen', label: 'Listen', value: 2 }, { id: 'hide', label: 'Conceal', value: 4 }] },
-    { id: 'lin', name: 'Lin Cheng', role: 'Night-shift nurse', vitality: 6, stress: 7, skills: [{ id: 'coordinate', label: 'Coordinate', value: 4 }, { id: 'act', label: 'Initiative', value: 3 }] },
-    { id: 'mo', name: 'Mo He', role: 'Graduate student', vitality: 8, stress: 4, skills: [{ id: 'listen', label: 'Listen', value: 4 }, { id: 'coordinate', label: 'Coordinate', value: 2 }] },
+    { id: 'jo', name: 'Jo', role: 'Freelance photographer', vitality: 7, stress: 6, detail: 'Notices images others miss, but often leaves difficult truths trapped inside his camera.', lore: 'He trades use of the rooftop storage room for reduced rent, so he fears losing shared space most.', skills: [{ id: 'listen', label: 'Listen', value: 2 }, { id: 'hide', label: 'Conceal', value: 4 }] },
+    { id: 'lin', name: 'Lin Cheng', role: 'Night-shift nurse', vitality: 6, stress: 7, detail: 'Decisive under pressure, accustomed to assigning tasks and reconstructing timelines.', lore: 'She is the only resident with a complete written lease, so the others often ask her to represent them.', skills: [{ id: 'coordinate', label: 'Coordinate', value: 4 }, { id: 'act', label: 'Initiative', value: 3 }] },
+    { id: 'mo', name: 'Mo He', role: 'Graduate student', vitality: 8, stress: 4, detail: 'Patient with accounts and arguments, and remembers what a sentence meant months ago.', lore: 'He first bound the shared ledger from discarded thesis pages. It now holds repairs, debts, and promises.', skills: [{ id: 'listen', label: 'Listen', value: 4 }, { id: 'coordinate', label: 'Coordinate', value: 2 }] },
   ],
-  initialMap: [{ id: 'kitchen', label: 'Shared Kitchen', current: true }, { id: 'roof', label: 'Rooftop', connectedTo: 'Shared Kitchen' }, { id: 'street', label: 'Neighborhood', connectedTo: 'Rooftop' }],
-  initialInventory: [{ id: 'ledger', label: 'Shared ledger', count: 1 }, { id: 'keys', label: 'Spare keys', count: 2 }],
+  initialMap: [
+    { id: 'kitchen', label: 'Shared Kitchen', current: true, detail: 'Four mismatched mugs, an old refrigerator, and a table perpetually occupied by bills.', lore: 'The lease never promised a shared kitchen. Generations of residents negotiated it into existence.', facts: ['The surcharge notice is under the salt jar', 'Every resident is home tonight'] },
+    { id: 'roof', label: 'Rooftop', connectedTo: 'Shared Kitchen', detail: 'Planters, clotheslines, and a repeatedly leaking pipe share a half-open platform.', lore: 'The resident-built garden made the building feel like home—and gave the landlord a reason to add fees.', facts: ['The meter was reversing last Wednesday', 'Jo photographed the leak'] },
+    { id: 'street', label: 'Neighborhood', connectedTo: 'Rooftop', detail: 'An old neighborhood where residents are better known than official shop names.', lore: 'Neighbor trust determines who will testify for the apartment and who will pretend not to see a dispute.', facts: ['Neighbors can see the rooftop work', 'The landlord does not live nearby'] },
+  ],
+  initialInventory: [
+    { id: 'ledger', label: 'Shared ledger', count: 1, detail: 'A thick book bound from discarded papers and cotton thread, full of receipts and repair numbers.', effect: 'Checks shared spending, debts, and repair dates; missing or unsigned records are clues, not proof by themselves.', lore: 'It slowly turned temporary tenants into a household. Some promises exist nowhere else.', metrics: [{ label: 'Record span', value: '2 years 4 months' }, { label: 'Missing pages', value: '1' }], imagePrompt: 'single handmade communal apartment ledger bound from recycled paper with cotton thread, receipts and blank sticky notes, no readable text, warm window light, object only, square' },
+    { id: 'keys', label: 'Spare keys', count: 2, detail: 'Two mismatched brass keys on faded plastic tags with no writing.', effect: 'Open the rooftop door and basement meter room; shared security falls if a borrowed key is not returned.', lore: 'Departing tenants usually return their keys. The former owners of these two left no forwarding address.', metrics: [{ label: 'Rooftop', value: '1 key' }, { label: 'Meter room', value: '1 key' }], imagePrompt: 'two mismatched old brass apartment keys on faded plastic tags without writing, intimate domestic still life, warm brick and plant green, object only, square' },
+  ],
   demoTurns: [
     { match: ['hear', 'listen', 'ledger', 'record', 'repair'], content: `You place the surcharge notice in the middle of the table and ask everyone to describe what they saw, in order.
 [Lin Cheng] [main] [thinking]: "The water meter was already running backward early last Wednesday. The rooftop work had not begun."
