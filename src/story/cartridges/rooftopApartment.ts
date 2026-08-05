@@ -7,6 +7,14 @@ const shared = {
   id: 'rooftop-apartment',
   coverImage,
   theme: { outer: '#111112', surface: '#171718', paper: '#e5ddcf', ink: '#2b2925', muted: '#817b72', accent: '#63826b', danger: '#a85f4d', gold: '#d4a860', material: 'apartment' as const },
+  audioTheme: {
+    material: 'apartment' as const,
+    bpm: 62,
+    rootHz: 130.81,
+    scale: [0, 2, 4, 7, 9],
+    levels: { music: .11, ambient: .075, sfx: .16, master: .22 },
+    tension: [{ statId: 'rent', direction: 'high' as const, weight: .4 }, { statId: 'order', direction: 'low' as const, weight: .3 }, { statId: 'reputation', direction: 'low' as const, weight: .3 }],
+  },
 }
 
 export const rooftopApartment: StoryCartridge = {
