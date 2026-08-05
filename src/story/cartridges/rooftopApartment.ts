@@ -1,4 +1,4 @@
-import type { StoryCartridge } from '../types'
+import type { StoryCartridge, StoryImageDirector } from '../types'
 
 const coverImage = new URL('../img/worlds/rooftop-apartment.webp', import.meta.url).href
 const entryImage = new URL('../img/worlds/rooftop-apartment-entry.webp', import.meta.url).href
@@ -10,6 +10,13 @@ const shared = {
   entryImage,
   theme: { outer: '#111112', surface: '#171718', paper: '#e5ddcf', ink: '#2b2925', muted: '#817b72', accent: '#63826b', danger: '#a85f4d', gold: '#d4a860', material: 'apartment' as const },
   itemImageDirection: 'intimate editorial domestic still life, lived-in rooftop apartment, warm brick, plant green and faded cream, soft window light, tactile everyday realism',
+  sceneImageDirection: 'intimate editorial slice-of-life illustration in a lived-in rooftop apartment, muted brick, plant green and faded cream, tactile everyday realism, soft window and city light, restrained natural gestures',
+  imageDirector: {
+    maxQuietTurns: 4,
+    softCooldownTurns: 2,
+    guaranteedTriggers: ['new-location', 'rare-item', 'party-change', 'chapter-checkpoint'],
+    softTriggers: ['relationship-change', 'objective-change', 'skill-outcome'],
+  } satisfies StoryImageDirector,
   audioTheme: {
     material: 'apartment' as const, bpm: 62, rootHz: 130.81, scale: [0, 2, 4, 7, 9],
     levels: { music: .11, ambient: .075, sfx: .16, master: .22 },
