@@ -20,7 +20,7 @@
 - `src/story/usePlayerProfile.ts`：调试覆盖、Aigram 用户资料与默认 `U` 回退。
 - `src/story/audio/StorySynth.ts`、`useStoryAudio.ts`：程序化室内声景、事件反馈、数值张力映射与静音记忆。
 - `src/shared/runtime/`、`src/shared/save/`：平台 bridge、生图与存档实现。
-- `src/story/img/worlds/rooftop-apartment.webp`：入口和图片等待态共用的无字公寓母图。
+- `src/story/img/worlds/rooftop-apartment-entry.webp`：原生 16:9、无画框的首页公寓横图；`rooftop-apartment.webp` 方形母图只用于图片等待态。
 - `public/poster.png`、`doc/poster-source.md`：正式英文海报及 transit 来源记录。
 
 ## 3. 核心模块

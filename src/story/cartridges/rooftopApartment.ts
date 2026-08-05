@@ -1,11 +1,13 @@
 import type { StoryCartridge } from '../types'
 
 const coverImage = new URL('../img/worlds/rooftop-apartment.webp', import.meta.url).href
+const entryImage = new URL('../img/worlds/rooftop-apartment-entry.webp', import.meta.url).href
 
 const shared = {
   schemaVersion: 1 as const,
   id: 'rooftop-apartment',
   coverImage,
+  entryImage,
   theme: { outer: '#111112', surface: '#171718', paper: '#e5ddcf', ink: '#2b2925', muted: '#817b72', accent: '#63826b', danger: '#a85f4d', gold: '#d4a860', material: 'apartment' as const },
   itemImageDirection: 'intimate editorial domestic still life, lived-in rooftop apartment, warm brick, plant green and faded cream, soft window light, tactile everyday realism',
   audioTheme: {
