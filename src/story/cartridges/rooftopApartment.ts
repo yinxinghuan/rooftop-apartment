@@ -11,6 +11,7 @@ const shared = {
   theme: { outer: '#111112', surface: '#171718', paper: '#e5ddcf', ink: '#2b2925', muted: '#817b72', accent: '#63826b', danger: '#a85f4d', gold: '#d4a860', material: 'apartment' as const },
   itemImageDirection: 'intimate editorial domestic still life, lived-in rooftop apartment, warm brick, plant green and faded cream, soft window light, tactile everyday realism',
   sceneImageDirection: 'intimate editorial slice-of-life illustration in a lived-in rooftop apartment, muted brick, plant green and faded cream, tactile everyday realism, soft window and city light, restrained natural gestures',
+  sceneImageAvoid: 'the communal kitchen table, four mismatched mugs, the rent notice still life, or the original dusk window arrangement',
   imageDirector: {
     maxQuietTurns: 4,
     softCooldownTurns: 2,
