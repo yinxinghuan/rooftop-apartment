@@ -1,7 +1,51 @@
-import type { StoryCartridge, StoryImageDirector } from '../types'
+import type { StoryCartridge, StoryDangerDirector, StoryDirector, StoryImageDirector } from '../types'
 
 const coverImage = new URL('../img/worlds/rooftop-apartment.webp', import.meta.url).href
 const entryImage = new URL('../img/worlds/rooftop-apartment-entry.webp', import.meta.url).href
+
+function storyDirector(locale: 'zh' | 'en'): StoryDirector {
+  const zh = locale === 'zh'
+  return {
+    mode: 'guided',
+    fixedWorldRules: zh ? [
+      '这是现实可理解的合租生活故事。租金、公共秩序、邻里声誉、证据、钥匙和承诺都必须产生连续后果。',
+      '乔、林澄和莫河是持续存在的住户；遇见房东、邻居或新住户不能让原有人物消失。',
+      '人物只知道亲历、被告知或从账本与证据推断的事情；不能用模型全知替代人物沟通。',
+    ] : [
+      'This is grounded shared-apartment life. Rent, shared order, neighborhood reputation, evidence, keys and promises have continuous consequences.',
+      'Jo, Lin Cheng and Mo He remain persistent residents. Meeting the landlord, neighbors or newcomers never erases them.',
+      'People know only what they experienced, were told, or inferred from records and evidence; model omniscience never replaces communication.',
+    ],
+    generationRules: zh ? [
+      '每轮推进当前生活矛盾或改变一个具体关系、证据、公共物品、时间、地点或公共数值，不能连续只写闲聊。',
+      '危机以协商、分工、修复、证据和承担责任为主要方法，不把物理战斗当作常规玩法。',
+      '失败产生催缴、故障、投诉、关系破裂、公共空间损失或住户离开风险，不删档。',
+    ] : [
+      'Every turn advances the current life conflict or changes a relationship, evidence, shared item, time, place or public stat; do not write consecutive idle chat.',
+      'Crises center negotiation, coordination, repair, evidence and responsibility. Physical combat is not routine play.',
+      'Failure causes collection pressure, breakdowns, complaints, relationship rupture, lost common space or a risk of departure, never save deletion.',
+    ],
+    choiceIntents: zh ? ['倾听、协商或查证', '分工、修复或使用公共物品', '承担责任、设立边界或拒绝'] : ['listen, negotiate, or verify', 'coordinate, repair, or use a shared item', 'take responsibility, set a boundary, or refuse'],
+    maxActiveThreads: 3,
+  }
+}
+
+function dangerDirector(locale: 'zh' | 'en'): StoryDangerDirector {
+  const zh = locale === 'zh'
+  return {
+    minSafeTurns: 3, maxSafeTurns: 5, cooldownTurns: 1,
+    escalationStats: ['rent', 'order', 'reputation'],
+    threatPalette: zh
+      ? ['房东的催缴或突访正在逼近', '公共区域突然断水或断电', '一处共用设施发生故障', '邻居准备正式投诉', '住户之间的重要承诺即将破裂', '关键生活证据正在失效']
+      : ['a landlord collection demand or surprise visit is imminent', 'water or power has failed in a shared area', 'a shared facility has broken down', 'a neighbor is preparing a formal complaint', 'an important promise between residents is breaking', 'key household evidence is becoming unusable'],
+    methods: zh ? ['倾听、协商或查明事实', '分工、修复或寻找替代方案', '使用证据、公共物品或明确边界'] : ['listen, negotiate, or establish facts', 'coordinate, repair, or find an alternative', 'use evidence, a shared item, or set a boundary'],
+    physicalCombat: 'none',
+    resolution: {
+      skill: zh ? '共同生活应对' : 'Shared Living', modifier: 2, dcBySeverity: [8, 10, 12, 14, 16],
+      fallbackCosts: [{ statId: 'order', operation: 'remove', amount: 8 }],
+    },
+  }
+}
 
 const shared = {
   schemaVersion: 1 as const,
@@ -32,6 +76,8 @@ const shared = {
 export const rooftopApartment: StoryCartridge = {
   ...shared, locale: 'zh',
   copy: { title: '屋顶公寓', subtitle: '四个人的公共生活记录', promise: '每件小事都会留下关系上的回声。', enter: '推开屋顶门', continue: '继续今天', customAction: '说说你想怎么做', itemImagingTitle: '公共柜正在归档', itemImagingBody: '你打开公共柜，住户记录开始为这些共同物品留下影像。它们会沿用公寓的纸张、暖光和生活痕迹，并在后台逐件完成。' },
+  director: storyDirector('zh'),
+  dangerDirector: dangerDirector('zh'),
   statDefinitions: [
     { id: 'rent', label: '租金压力', min: 0, max: 100, initial: 42, display: 'bar', warningAt: 70, dangerAt: 90 },
     { id: 'order', label: '公共秩序', min: 0, max: 100, initial: 68, inverse: true, display: 'bar', warningAt: 40, dangerAt: 20 },
@@ -84,6 +130,8 @@ export const rooftopApartment: StoryCartridge = {
 export const rooftopApartmentEn: StoryCartridge = {
   ...shared, locale: 'en',
   copy: { title: 'Rooftop Apartment', subtitle: 'A record of four shared lives', promise: 'Every small decision leaves an echo in the relationships around you.', enter: 'Open the rooftop door', continue: 'Continue today', customAction: 'Say what you want to do', itemImagingTitle: 'The shared cupboard is being archived', itemImagingBody: 'Opening the cupboard starts a visual record of the things everyone shares. Each plate keeps the apartment’s paper, warm window light, and lived-in traces while it develops in the background.' },
+  director: storyDirector('en'),
+  dangerDirector: dangerDirector('en'),
   statDefinitions: [
     { id: 'rent', label: 'Rent pressure', min: 0, max: 100, initial: 42, display: 'bar', warningAt: 70, dangerAt: 90 },
     { id: 'order', label: 'Shared order', min: 0, max: 100, initial: 68, inverse: true, display: 'bar', warningAt: 40, dangerAt: 20 },
