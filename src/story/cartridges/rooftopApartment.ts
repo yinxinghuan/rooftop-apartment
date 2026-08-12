@@ -75,6 +75,7 @@ const shared = {
 
 export const rooftopApartment: StoryCartridge = {
   ...shared, locale: 'zh',
+  transitionAnchor: '所有住户都会经过的楼梯平台与公共留言板',
   copy: { title: '屋顶公寓', subtitle: '四个人的公共生活记录', promise: '每件小事都会留下关系上的回声。', enter: '推开屋顶门', continue: '继续今天', customAction: '说说你想怎么做', itemImagingTitle: '公共柜正在归档', itemImagingBody: '你打开公共柜，住户记录开始为这些共同物品留下影像。它们会沿用公寓的纸张、暖光和生活痕迹，并在后台逐件完成。' },
   director: storyDirector('zh'),
   dangerDirector: dangerDirector('zh'),
@@ -150,6 +151,7 @@ export const rooftopApartment: StoryCartridge = {
 
 export const rooftopApartmentEn: StoryCartridge = {
   ...shared, locale: 'en',
+  transitionAnchor: 'the shared stair landing and residents’ notice board',
   copy: { title: 'Rooftop Apartment', subtitle: 'A record of four shared lives', promise: 'Every small decision leaves an echo in the relationships around you.', enter: 'Open the rooftop door', continue: 'Continue today', customAction: 'Say what you want to do', itemImagingTitle: 'The shared cupboard is being archived', itemImagingBody: 'Opening the cupboard starts a visual record of the things everyone shares. Each plate keeps the apartment’s paper, warm window light, and lived-in traces while it develops in the background.' },
   director: storyDirector('en'),
   dangerDirector: dangerDirector('en'),
