@@ -78,6 +78,27 @@ export const rooftopApartment: StoryCartridge = {
   copy: { title: '屋顶公寓', subtitle: '四个人的公共生活记录', promise: '每件小事都会留下关系上的回声。', enter: '推开屋顶门', continue: '继续今天', customAction: '说说你想怎么做', itemImagingTitle: '公共柜正在归档', itemImagingBody: '你打开公共柜，住户记录开始为这些共同物品留下影像。它们会沿用公寓的纸张、暖光和生活痕迹，并在后台逐件完成。' },
   director: storyDirector('zh'),
   dangerDirector: dangerDirector('zh'),
+  initialFacts: {},
+  domainRules: [
+    {
+      id: 'first-listen', when: { factUnset: ['first-method'] }, action: { exact: ['先听每个人说自己知道的情况'] },
+      effects: [{ type: 'fact', key: 'first-method', value: 'listen' }, { type: 'fact', key: 'shared-timeline-started', value: true }, { type: 'stat', id: 'order', delta: 6 }, { type: 'clock', value: '周一 19:55' }, { type: 'objective', value: '把四个人记得的时间线拼完整' }],
+      successText: '你把补缴单放到桌子正中，先不讨论谁负责，只让每个人按时间说自己看见了什么。林澄记得上周三水表已经倒转；乔承认拍过漏水照片；莫河想起账本里夹着一张同日维修单。争执没有消失，但第一次有了一条大家都能修正的共同时间线。',
+      successChoices: ['请乔拿出上周三的照片', '和莫河核对账本里的维修编号', '让林澄整理一份给房东的时间线'],
+    },
+    {
+      id: 'first-records', when: { factUnset: ['first-method'] }, action: { exact: ['检查公共账本和维修记录'] },
+      effects: [{ type: 'fact', key: 'first-method', value: 'records' }, { type: 'fact', key: 'old-repair-ticket-found', value: true }, { type: 'stat', id: 'order', delta: 4 }, { type: 'stat', id: 'rent', delta: -7 }, { type: 'clock', value: '周一 19:52' }, { type: 'objective', value: '确认旧维修单能否证明漏水早于屋顶改造' }],
+      successText: '你和莫河翻开公共账本，在脱线的夹页里找到一张上周三的维修受理号——比屋顶改造早两天。它还不是足够完整的证据，却让补缴单上的因果顺序出现了裂缝。乔停止道歉，林澄开始记下需要向物业确认的问题。',
+      successChoices: ['打给维修平台核对受理号', '请乔找出漏水照片的原始时间', '把证据摊开后再听每个人补充'],
+    },
+    {
+      id: 'first-landlord', when: { factUnset: ['first-method'] }, action: { exact: ['立刻给房东打电话'] },
+      effects: [{ type: 'fact', key: 'first-method', value: 'landlord-call' }, { type: 'fact', key: 'landlord-deadline-set', value: true }, { type: 'stat', id: 'rent', delta: 5 }, { type: 'stat', id: 'reputation', delta: 4 }, { type: 'clock', value: '周一 19:48' }, { type: 'objective', value: '在明早九点前提交漏水早于改造的证据' }],
+      successText: '你当着所有人的面拨通电话。房东没有撤回补缴单，却明确给出条件：明早九点前，如果你们能证明漏水早于屋顶改造，他会暂停追缴并让物业复查。直接交涉让压力暂时升高，也把含糊的争执变成了一个能共同应对的期限。',
+      successChoices: ['立刻检查账本和维修记录', '让乔导出带时间信息的原始照片', '去楼下询问看见漏水的邻居'],
+    },
+  ],
   statDefinitions: [
     { id: 'rent', label: '租金压力', min: 0, max: 100, initial: 42, display: 'bar', warningAt: 70, dangerAt: 90 },
     { id: 'order', label: '公共秩序', min: 0, max: 100, initial: 68, inverse: true, display: 'bar', warningAt: 40, dangerAt: 20 },
@@ -132,6 +153,27 @@ export const rooftopApartmentEn: StoryCartridge = {
   copy: { title: 'Rooftop Apartment', subtitle: 'A record of four shared lives', promise: 'Every small decision leaves an echo in the relationships around you.', enter: 'Open the rooftop door', continue: 'Continue today', customAction: 'Say what you want to do', itemImagingTitle: 'The shared cupboard is being archived', itemImagingBody: 'Opening the cupboard starts a visual record of the things everyone shares. Each plate keeps the apartment’s paper, warm window light, and lived-in traces while it develops in the background.' },
   director: storyDirector('en'),
   dangerDirector: dangerDirector('en'),
+  initialFacts: {},
+  domainRules: [
+    {
+      id: 'first-listen', when: { factUnset: ['first-method'] }, action: { exact: ['Hear what each resident knows first'] },
+      effects: [{ type: 'fact', key: 'first-method', value: 'listen' }, { type: 'fact', key: 'shared-timeline-started', value: true }, { type: 'stat', id: 'order', delta: 6 }, { type: 'clock', value: 'Monday 19:55' }, { type: 'objective', value: 'Complete a timeline everyone can correct together' }],
+      successText: 'You put the surcharge notice in the center of the table and ask everyone to describe what they saw before discussing blame. Lin remembers the meter reversing last Wednesday; Jo admits he photographed the leak; Mo recalls a repair slip from the same day. The disagreement remains, but it now has a shared timeline everyone can challenge and repair.',
+      successChoices: ['Ask Jo for last Wednesday’s original photos', 'Check the repair number with Mo', 'Have Lin turn the accounts into a landlord-ready timeline'],
+    },
+    {
+      id: 'first-records', when: { factUnset: ['first-method'] }, action: { exact: ['Check the shared ledger and repair records'] },
+      effects: [{ type: 'fact', key: 'first-method', value: 'records' }, { type: 'fact', key: 'old-repair-ticket-found', value: true }, { type: 'stat', id: 'order', delta: 4 }, { type: 'stat', id: 'rent', delta: -7 }, { type: 'clock', value: 'Monday 19:52' }, { type: 'objective', value: 'Confirm whether the old repair ticket predates the rooftop work' }],
+      successText: 'You and Mo open the shared ledger and find a repair intake number in a loose page, dated two days before the rooftop work. It is not complete proof, but it breaks the surcharge’s claimed order of cause and effect. Jo stops apologizing; Lin starts listing what the building office must verify.',
+      successChoices: ['Call the repair service about the intake number', 'Ask Jo for the original photo timestamps', 'Lay out the evidence and hear everyone’s additions'],
+    },
+    {
+      id: 'first-landlord', when: { factUnset: ['first-method'] }, action: { exact: ['Call the landlord immediately'] },
+      effects: [{ type: 'fact', key: 'first-method', value: 'landlord-call' }, { type: 'fact', key: 'landlord-deadline-set', value: true }, { type: 'stat', id: 'rent', delta: 5 }, { type: 'stat', id: 'reputation', delta: 4 }, { type: 'clock', value: 'Monday 19:48' }, { type: 'objective', value: 'Submit evidence by 09:00 that the leak predates the rooftop work' }],
+      successText: 'You make the call with everyone present. The landlord does not withdraw the surcharge, but sets a clear condition: prove by nine tomorrow that the leak predates the rooftop work, and collection will pause for a building review. The direct move raises immediate pressure, but turns a vague conflict into a deadline the household can face together.',
+      successChoices: ['Check the ledger and repair records now', 'Have Jo export the original photographs', 'Ask downstairs neighbors who saw the leak'],
+    },
+  ],
   statDefinitions: [
     { id: 'rent', label: 'Rent pressure', min: 0, max: 100, initial: 42, display: 'bar', warningAt: 70, dangerAt: 90 },
     { id: 'order', label: 'Shared order', min: 0, max: 100, initial: 68, inverse: true, display: 'bar', warningAt: 40, dangerAt: 20 },

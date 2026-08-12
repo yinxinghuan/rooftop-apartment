@@ -28,9 +28,11 @@
 
 `StoryShell` 只解析语言、`story_mode`、`chat_id` 和玩家身份，不接受 Cartridge 切换。无 chatId 且未显式 demo 时默认 `aigram`。页面按 `entry → conversation + composer + optional drawer` 组织，Shell 明确使用 `minmax(0,1fr)` 网格列，避免 320 px 下长行动把右侧头像推出屏幕。721 px 以上 Shell 最大 960 px；正文、快速回复和输入区按 Shell 自身 `100%` 计算 680 px 中心阅读列，不能用 `100vw` 参与内部留白。页眉中心轴最大 760 px，抽屉与 Shell 同宽。
 
-`StorySave.version = 6` 新增持久化 `danger` 状态。本作现在同时具备专属 `director` 与 `dangerDirector`，但 `physicalCombat = none`：普通 3–5 个安全行动后按生活征兆→必须处理的冲突→解决与余波推进；租金/秩序/声誉跨阈值会提高严重度。解决 d20 由本地稳定生成并覆盖 AI 自报值；若失败没有合法后果，公共秩序按有代价成功 -4、失败 -8、关键失败 -16 兜底。
+`StorySave.version = 7` 保存持久化 `facts` 与 `danger` 状态。本作现在同时具备专属 `director` 与 `dangerDirector`，但 `physicalCombat = none`：普通 3–5 个安全行动后按生活征兆→必须处理的冲突→解决与余波推进；租金/秩序/声誉跨阈值会提高严重度。解决 d20 由本地稳定生成并覆盖 AI 自报值；若失败没有合法后果，公共秩序按有代价成功 -4、失败 -8、关键失败 -16 兜底。
 
-`useStoryEngine()` 调用 `useGameSave('rooftop-apartment')`。本地命名空间与游戏 UUID 双重隔离；`archiveRef` 是写后立即更新的本地镜像，避免 `savedData` 只在挂载时读取造成后续写入覆盖。StorySave v6 保存地点、时间、目标、三项公共状态、剧情块、房间、公共物品、规范化角色、`partyMemberIds`、关系、危险导演状态、语言和远程 chatId。新住户与临时同行者采用合并，只有明确离开命令才能移除。
+`useStoryEngine()` 调用 `useGameSave('rooftop-apartment')`。本地命名空间与游戏 UUID 双重隔离；`archiveRef` 是写后立即更新的本地镜像，避免 `savedData` 只在挂载时读取造成后续写入覆盖。StorySave v7 保存地点、时间、目标、事实、三项公共状态、剧情块、房间、公共物品、规范化角色、`partyMemberIds`、关系、危险导演状态、语言和远程 chatId。新住户与临时同行者采用合并，只有明确离开命令才能移除。
+
+`domainRules.ts` 将“先倾听 / 先查账 / 立刻打电话”做成三个互斥的本地首轮事务。命中后完全跳过模型调用，分别形成共同时间线、旧维修证据或明早九点期限，并原子写入事实、数值、时间、目标和下一步。之后恢复累积文字、自由行动和生活危险导演，不改造成固定短局。
 
 若独立命名空间为空，引擎会读取旧 `stateful-story-template-save` 中的屋顶公寓世界并迁入 `rooftop-apartment-save`；平台内云存档继续由永久 UUID 隔离，已有住户关系不会因命名空间修正丢失。
 
@@ -51,6 +53,8 @@
 声音使用浏览器 Web Audio API 实时合成，不下载音频文件，也不请求音频生成接口。只有首次用户手势才创建 `AudioContext`；移动 WebView 的 `suspended/interrupted` 状态会恢复并用一帧静音 buffer 激活输出。`music / ambient / sfx` 三路总线限制最多 8 个活跃声部。公寓配置为 62 BPM、C3 根音和五声音阶；租金压力升高、公共秩序或邻里声誉降低会提高 8 拍循环的脉冲密度。进入、行动、检定成败、状态变化、发现、图片完成、阶段小结与错误均有独立 cue。顶部 44 px 扬声器按钮按实际 `ready` 状态显示开关；启动失败时单击直接重试，偏好写入 `localStorage.alteru_story_audio_muted`。页面后台暂停，设备不支持时静默降级；音频偏好不进入 StorySave。
 
 ## 4. 扩展点
+
+- 新增一次性承诺、账单证据、关系边界或互斥处理方式：在 cartridge 的 `domainRules` 声明完整 effects，并同步 `npm run test:domain`。
 
 - 改公寓故事、数值、住户、房间、公共物品和演示回合：编辑 `src/story/cartridges/rooftopApartment.ts`。
 - 改结构化规则或新增命令：先更新 `src/story/types.ts`，再改 `engine/protocol.ts` 与 `engine/reducer.ts`。
