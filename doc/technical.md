@@ -28,7 +28,7 @@
 
 `StoryShell` 只解析语言、`story_mode`、`chat_id` 和玩家身份，不接受 Cartridge 切换。无 chatId 且未显式 demo 时默认 `aigram`。页面按 `entry → conversation + composer + optional drawer` 组织，Shell 明确使用 `minmax(0,1fr)` 网格列，避免 320 px 下长行动把右侧头像推出屏幕。721 px 以上 Shell 最大 960 px；正文、快速回复和输入区按 Shell 自身 `100%` 计算 680 px 中心阅读列，不能用 `100vw` 参与内部留白。页眉中心轴最大 760 px，抽屉与 Shell 同宽。
 
-`StorySave.version = 7` 保存持久化 `facts` 与 `danger` 状态。本作现在同时具备专属 `director` 与 `dangerDirector`，但 `physicalCombat = none`：普通 3–5 个安全行动后按生活征兆→必须处理的冲突→解决与余波推进；租金/秩序/声誉跨阈值会提高严重度。解决 d20 由本地稳定生成并覆盖 AI 自报值；若失败没有合法后果，公共秩序按有代价成功 -4、失败 -8、关键失败 -16 兜底。
+`StorySave.version = 9` 保存持久化 `facts`、可选局面锚点与 `danger` 状态。本作现在同时具备专属 `director` 与 `dangerDirector`，但 `physicalCombat = none`：普通 3–5 个安全行动后按生活征兆→必须处理的冲突→解决与余波推进；租金/秩序/声誉跨阈值会提高严重度。解决 d20 由本地稳定生成并覆盖 AI 自报值；若失败没有合法后果，公共秩序按有代价成功 -4、失败 -8、关键失败 -16 兜底。
 
 `useStoryEngine()` 调用 `useGameSave('rooftop-apartment')`。本地命名空间与游戏 UUID 双重隔离；`archiveRef` 是写后立即更新的本地镜像，避免 `savedData` 只在挂载时读取造成后续写入覆盖。StorySave v7 保存地点、时间、目标、事实、三项公共状态、剧情块、房间、公共物品、规范化角色、`partyMemberIds`、关系、危险导演状态、语言和远程 chatId。新住户与临时同行者采用合并，只有明确离开命令才能移除。
 
@@ -75,6 +75,6 @@
 
 ## 连续性守门（2026-08-13）
 
-- Cartridge 通过 `transitionAnchor` 声明“公共楼梯平台与住户留言板”；`src/story/engine/continuity.ts` 生成地点桥接、压缩 `decisionContext` 并核验选项名词是否已有可见依据。
-- `reducer.ts` 在 `map_update` 与受管辖地图事务提交前插入桥接，并在选择落入 UI 前执行 grounded-choice 检查；旧存档升级到 StorySave v8 时从现有目标补齐 `decisionContext`。
+- Cartridge 通过 `transitionAnchor` 声明“公共楼梯平台与住户留言板”；`continuity.ts` 生成地点桥接、校验可选 `[situation]` 短摘要没有复制本回合正文，并核验选项名词是否已有可见依据。
+- StorySave v9 清除旧版本机械截断的 `decisionContext`；普通回合保持为空，只有合格的显式 `[situation]` 才显示“眼前”。`protocol.ts` 同时移除模型误写的状态清单但保留 `[widget]`，`StoryShell.tsx` 依据权威 `stat/delta` 渲染增减签条与顶部单项动态反馈。
 - `_qa/continuity-gate.ts` 以未登场的“国王 / 快递员 / 玻璃王国”作为反例，同时断言中转锚点先于目的地正文。
