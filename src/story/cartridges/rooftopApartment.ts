@@ -2,6 +2,8 @@ import type { PresetEventDefinition, StoryCartridge, StoryDangerDirector, StoryD
 
 const coverImage = new URL('../img/worlds/rooftop-apartment.webp', import.meta.url).href
 const entryImage = new URL('../img/worlds/rooftop-apartment-entry.webp', import.meta.url).href
+const audioThemeUrl = new URL('../audio/assets/theme.mp3', import.meta.url).href
+const audioAmbienceUrl = new URL('../audio/assets/ambience.mp3', import.meta.url).href
 
 function storyDirector(locale: 'zh' | 'en'): StoryDirector {
   const zh = locale === 'zh'
@@ -83,6 +85,7 @@ const shared = {
     perspective: { ordinary: 'balanced', importantDialogue: 'first-person', newLocation: 'observer' },
   } satisfies StoryImageDirector,
   audioTheme: {
+    recorded: { music: { src: audioThemeUrl, gain: .2 }, ambience: { src: audioAmbienceUrl, gain: .29 } },
     material: 'apartment' as const, bpm: 62, rootHz: 130.81, scale: [0, 2, 4, 7, 9],
     levels: { music: .11, ambient: .075, sfx: .16, master: .22 },
     tension: [

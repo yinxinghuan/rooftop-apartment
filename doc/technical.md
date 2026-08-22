@@ -87,3 +87,6 @@ V10 在上述导演上增加 Cartridge 级 `perspective` 与 `presetEventDirecto
 
 - `engine/authorityShadow.ts` 只读取当前 StorySave 和既有 `domainRules`，把可见选项分类为 `accepted / rejected / open`，同时报告非终局空 tray；它不替换推荐、不写存档、不上传数据。
 - 页面内存只保留最近 100 个去重样本，`?authority_shadow=0` 可关闭。`npm run test:authority-shadow` 验证这一层对玩家选择为零改写。
+## 2026-08-23 混合音频升级
+
+`src/story/audio/` 新增本作专属的亲密室内主题与屋顶公寓环境声，精确反馈继续由 Web Audio 负责。长音频仅在用户手势后启动，静音/后台暂停，自然结束后等待再播放；文件失败不影响关系、生活事件与存档。
